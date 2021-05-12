@@ -10,7 +10,7 @@ class UserProfileManager(BaseUserManager):
         if not email:
             raise ValueError('User must have an email address')
 
-        email =  self.normalize(email)
+        email =  self.normalize_email(email)
         user = self.model(email=email, name=name)
 
         user.set_password(password)
@@ -20,7 +20,7 @@ class UserProfileManager(BaseUserManager):
 
     def create_superuser(self, email, name, password):
         """Create and save a new superuser with given details"""
-        user = self.create_userd(email, name, password)
+        user = self.create_user(email, name, password)
 
         user.is_superuser = True
         user.is_staff = True
@@ -39,7 +39,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     objects = UserProfileManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELD = ['name']
+    REQUIRED_FIELDS = ['name']
 
     def get_full_name(self):
         """Retrive full name of user"""
